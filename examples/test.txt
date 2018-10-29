@@ -1,0 +1,14 @@
+%chk=test.chk
+%nprocs=8
+%mem=1GB
+#P pbepbe/6-31G opt td=(nstates=10) 
+
+test
+
+0 1
+0.0 0.0 0.0
+0.0 0.0 0.8
+0.0 0.8 0.8
+
+
+
