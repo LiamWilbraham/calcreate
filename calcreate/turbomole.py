@@ -25,6 +25,7 @@ class Turbomole:
 
     def generate_input(self):
         pipe = self._generate_pipe()
+        generate_xyz(smiles, xtb)
         self._generate_coord()
         self._define(pipe)
         self._add_solvent()

@@ -10,7 +10,7 @@ class Gaussian:
     A class for creating Gaussian input files from SMILES strings.
     Arbitrary keywords can be specified and initial geometries can either
     be approximated by the ETKDG method or via semi-empirical tight binding
-    method, GFN-xTB (if available.)
+    method, GFN-xTB (if available).
 
     Parameters
     ----------
@@ -83,16 +83,13 @@ class Gaussian:
         self._write_input(header, kwds, xyz)
         self._remove_junk()
 
-
     def _generate_header(self):
         string = "%chk={}.chk\n%nprocs={}\n%mem={}\n"
         return string.format(self.name, self.nprocs, self.mem)
 
-
     def _generate_kwds(self):
         string = '{} '*len(self.kwds)+'\n'
         return string.format(*self.kwds)
-
 
     def _write_input(self, header, kwds, xyz):
         with open('{}.txt'.format(self.name), 'w') as f:
@@ -104,7 +101,6 @@ class Gaussian:
             for line in xyz:
                 f.write(line)
             f.write('\n\n\n\n')
-
 
     def _remove_junk(self):
         os.system('rm mol xyz')
