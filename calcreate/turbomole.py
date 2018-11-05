@@ -1,4 +1,5 @@
 from .utilities import *
+import subprocess as sp
 
 class Turbomole:
 
@@ -8,9 +9,8 @@ class Turbomole:
                  func='pbe-pbe',
                  basis='DZP',
                  charge=0,
-                 mult=1,
-                 kwd_dict={'opt':300, 'rpas':5, 'exopt':300},
-                 solvent=None,
+                 kwd_dict={'rpas':5},
+                 solvent_epsilon=None,
                  xtb=False
                  ):
 
@@ -19,23 +19,34 @@ class Turbomole:
         self.func = func
         self.basis = basis
         self.charge = charge
-        self.mult = mult
         self.kwd_dict = kwd_dict
-        self.solvent = solvent
+        self.solvent_epsilon = solvent_epsilon
         self.xtb = xtb
 
-    def generate_input():
-        pipe = _generate_pipe()
-        _generate_coord()
-        _define(pipe)
+    def generate_input(self):
+        pipe = self._generate_pipe()
+        self._generate_coord()
+        self._define(pipe)
+        self._add_solvent()
 
+    def _define(self, pipe):
+        p = Popen(['define'], stdout=PIPE, stdin=PIPE)
+        o, e = p.communicate(pipe)
 
-    def _define():
-        pass
+    def _generate_pipe(self):
+        pipe = 'a coord\nired\n*\neht\n\n'
+        pipe += str(self.charge)
+        pipe += '\n\n\nscf\niter\n300\n\ndft\non\nfunc '
+        pipe += self.func
+        pipe += '\n\n*\n\n'
+        return pipe
 
+    def _generate_coord(self):
+        sp.call(['x2t', 'xyz', 'coord'])
 
-    def _generate_pipe():
-        pass
-
-    def _generate_coord():
-        pass
+    def _add_solvent(self):
+        with open('control') as f:
+            control = f.readlines()[:-1]
+        control += '$cosmo\nepsilon={}\n$end'.format(self.solvent_epsilon)
+        with open('control') as f:
+            f.write(control)
