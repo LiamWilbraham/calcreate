@@ -1,5 +1,4 @@
 
-
 def generate_xyz(smiles, xtb):
     #mol = Chem.MolFromSmiles(smiles)
     #mol = Chem.AddHs(mol)
