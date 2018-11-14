@@ -36,9 +36,11 @@ class Turbomole:
         o, e = p.communicate(pipe.encode())
 
     def _generate_pipe(self):
-        pipe = 'a coord\nired\n*\neht\n\n'
+        pipe = 'a coord\nired\n*\nb all '
+        pipe += self.basis
+        pipe += '\n*\neht\n\n'
         pipe += str(self.charge)
-        pipe += '\n\n\nscf\niter\n300\n\ndft\non\nfunc '
+        pipe += '\n\n\nscf\niter\n300\n\ndft\non\nfunc\n'
         pipe += self.func
         pipe += '\n\n*\n\n'
         return pipe
