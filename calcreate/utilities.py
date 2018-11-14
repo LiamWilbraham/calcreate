@@ -1,11 +1,11 @@
 
 def generate_xyz(smiles, xtb):
-    #mol = Chem.MolFromSmiles(smiles)
-    #mol = Chem.AddHs(mol)
-    #AllChem.EmbedMolecule(mol, AllChem.ETKDG())
-    #print(Chem.MolToMolBlock(mol), file=open('mol','w+'))
+    mol = Chem.MolFromSmiles(smiles)
+    mol = Chem.AddHs(mol)
+    AllChem.EmbedMolecule(mol, AllChem.ETKDG())
+    print(Chem.MolToMolBlock(mol), file=open('mol','w+'))
 
-    #sp.call(['babel', 'mol', 'xyz'])
+    sp.call(['babel', 'mol', 'xyz'])
 
     if xtb:
         calc_params = ['xtb', 'xyz', '-opt']
