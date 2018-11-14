@@ -9,7 +9,7 @@ class Turbomole:
                  func='pbe-pbe',
                  basis='DZP',
                  charge=0,
-                 kwd_dict={'rpas':5},
+                 #kwd_dict={'rpas':5},
                  solvent_epsilon=None,
                  xtb=False
                  ):
@@ -19,13 +19,13 @@ class Turbomole:
         self.func = func
         self.basis = basis
         self.charge = charge
-        self.kwd_dict = kwd_dict
+        #self.kwd_dict = kwd_dict
         self.solvent_epsilon = solvent_epsilon
         self.xtb = xtb
 
     def generate_input(self):
         pipe = self._generate_pipe()
-        generate_xyz(smiles, xtb)
+        generate_xyz(self.smiles, self.xtb)
         self._generate_coord()
         self._define(pipe)
         self._add_solvent()
