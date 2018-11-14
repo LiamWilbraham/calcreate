@@ -28,7 +28,7 @@ class Turbomole:
         generate_xyz(self.smiles, self.xtb)
         self._generate_coord()
         self._define(pipe)
-        self._add_solvent()
+        #self._add_solvent()
 
     def _define(self, pipe):
         p = sp.Popen(['define'], stdout=sp.PIPE, stdin=sp.PIPE)
