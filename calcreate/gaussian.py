@@ -1,5 +1,3 @@
-from rdkit import Chem
-from rdkit.Chem import AllChem
 import subprocess as sp
 import os
 from .utilities import *
