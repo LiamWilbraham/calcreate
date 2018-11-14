@@ -9,7 +9,8 @@ def generate_xyz(smiles, xtb):
     AllChem.EmbedMolecule(mol, AllChem.ETKDG())
     print(Chem.MolToMolBlock(mol), file=open('mol','w+'))
 
-    sp.call(['babel', 'mol', 'xyz'])
+    p = sp.Popen(['babel', 'mol', 'xyz'], stdout=sp.PIPE)
+    o, e = p.communicate()
 
     if xtb:
         calc_params = ['xtb', 'xyz', '-opt']
