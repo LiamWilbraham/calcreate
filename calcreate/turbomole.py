@@ -32,7 +32,7 @@ class Turbomole:
 
     def _define(self, pipe):
         p = sp.Popen(['define'], stdout=sp.PIPE, stdin=sp.PIPE)
-        o, e = p.communicate(pipe)
+        o, e = p.communicate(pipe.encode())
 
     def _generate_pipe(self):
         pipe = 'a coord\nired\n*\neht\n\n'
