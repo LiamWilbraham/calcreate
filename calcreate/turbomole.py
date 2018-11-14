@@ -31,7 +31,7 @@ class Turbomole:
         self._add_solvent()
 
     def _define(self, pipe):
-        p = sp.Popen(['define'], stdout=PIPE, stdin=PIPE)
+        p = sp.Popen(['define'], stdout=sp.PIPE, stdin=sp.PIPE)
         o, e = p.communicate(pipe)
 
     def _generate_pipe(self):
