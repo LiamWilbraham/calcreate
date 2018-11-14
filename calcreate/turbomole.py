@@ -44,7 +44,10 @@ class Turbomole:
         return pipe
 
     def _generate_coord(self):
-        sp.call(['x2t', 'xyz', 'coord'])
+        p = sp.Popen(['x2t', 'xyz'], stdout=sp.PIPE, encoding='utf8')
+        o, e = p.communicate()
+        with open('coord', 'w') as f:
+            f.write(o)
 
     def _add_solvent(self):
         with open('control') as f:
