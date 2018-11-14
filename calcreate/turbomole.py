@@ -1,5 +1,6 @@
 from .utilities import *
 import subprocess as sp
+import errno
 
 class Turbomole:
 
@@ -9,7 +10,8 @@ class Turbomole:
                  func='b3-lyp',
                  basis='DZP',
                  charge=0,
-                 #kwd_dict={'rpas':5},
+                 rpas=False,
+                 rpat=False,
                  solvent_epsilon=None,
                  xtb=False
                  ):
@@ -19,7 +21,8 @@ class Turbomole:
         self.func = func
         self.basis = basis
         self.charge = charge
-        #self.kwd_dict = kwd_dict
+        self.rpas = rpas
+        self.rpat = rpat
         self.solvent_epsilon = solvent_epsilon
         self.xtb = xtb
 
@@ -49,6 +52,10 @@ class Turbomole:
         pipe += str(self.charge)
         pipe += '\n\n\nscf\niter\n300\n\ndft\non\nfunc\n'
         pipe += self.func
+        if self.rpas is not False:
+            pipe += '\n\nex\nrpas\n*\na 5\n*\nrpacor 10000\n*'	
+        if self.rpat is not False:
+            pipe += '\n\nex\nrpat\n*\na 5\n*\nrpacor 10000\n*'
         pipe += '\n\n*\n'
         return pipe
 
