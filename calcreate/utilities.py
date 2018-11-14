@@ -1,6 +1,7 @@
 
 from rdkit import Chem
 from rdkit.Chem import AllChem
+import subprocess as sp
 
 def generate_xyz(smiles, xtb):
     mol = Chem.MolFromSmiles(smiles)
