@@ -1,4 +1,5 @@
-
+from contextlib import contextmanager
+import os
 from rdkit import Chem
 from rdkit.Chem import AllChem
 import subprocess as sp
@@ -23,3 +24,12 @@ def generate_xyz(smiles, xtb):
     else:
         with open('xyz') as f:
             return f.readlines()[2:]
+
+@contextmanager
+def cd(newdir):
+    prevdir = os.getcwd()
+    os.chdir(os.path.expanduser(newdir))
+    try:
+        yield
+    finally:
+        os.chdir(prevdir)

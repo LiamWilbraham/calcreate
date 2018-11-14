@@ -6,7 +6,7 @@ class Turbomole:
     def __init__(self,
                  name,
                  smiles,
-                 func='pbe-pbe',
+                 func='b3-lyp',
                  basis='DZP',
                  charge=0,
                  #kwd_dict={'rpas':5},
@@ -23,26 +23,33 @@ class Turbomole:
         self.solvent_epsilon = solvent_epsilon
         self.xtb = xtb
 
+        try:
+            os.makedirs(self.name)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+
     def generate_input(self):
-        pipe = self._generate_pipe()
-        generate_xyz(self.smiles, self.xtb)
-        self._generate_coord()
-        print(pipe)
-        self._define(pipe)
-        #self._add_solvent()
+        with cd(self.name):
+            pipe = self._generate_pipe()
+            generate_xyz(self.smiles, self.xtb)
+            self._generate_coord()
+            self._define(pipe)
+            if self.solvent_epsilon is not None:
+                self._add_solvent()
 
     def _define(self, pipe):
         p = sp.Popen(['define'], stdout=sp.PIPE, stdin=sp.PIPE)
         o, e = p.communicate(pipe.encode())
 
     def _generate_pipe(self):
-        pipe = 'a coord\nired\n*\nb all '
+        pipe = '\n\na coord\nired\n*\nb all '
         pipe += self.basis
         pipe += '\n*\neht\n\n'
         pipe += str(self.charge)
         pipe += '\n\n\nscf\niter\n300\n\ndft\non\nfunc\n'
         pipe += self.func
-        pipe += '\n\n*\n\n'
+        pipe += '\n\n*\n'
         return pipe
 
     def _generate_coord(self):
@@ -53,7 +60,7 @@ class Turbomole:
 
     def _add_solvent(self):
         with open('control') as f:
-            control = f.readlines()[:-1]
+            control = ''.join(f.readlines()[:-1])
         control += '$cosmo\nepsilon={}\n$end'.format(self.solvent_epsilon)
-        with open('control') as f:
-            f.write(control)
+        with open('control', 'w') as f:
+           f.write(control)
