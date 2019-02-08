@@ -13,7 +13,8 @@ class Turbomole:
                  rpas=False,
                  rpat=False,
                  solvent_epsilon=None,
-                 xtb=False
+                 xtb=False,
+                 gw=False
                  ):
 
         self.name = name
@@ -25,6 +26,7 @@ class Turbomole:
         self.rpat = rpat
         self.solvent_epsilon = solvent_epsilon
         self.xtb = xtb
+        self.gw = gw
 
         try:
             os.makedirs(self.name)
@@ -53,7 +55,9 @@ class Turbomole:
         pipe += '\n\n\nscf\niter\n300\n\ndft\non\nfunc\n'
         pipe += self.func
         if self.rpas is not False:
-            pipe += '\n\nex\nrpas\n*\na 5\n*\nrpacor 10000\n*'	
+            pipe += '\n\nex\nrpas\n*\na 5\n*\nrpacor 10000\n*'
+        if self.gw is not False:
+            pipe += '\n\ngw\ngw on\nrpa\nrpa on\n*'
         if self.rpat is not False:
             pipe += '\n\nex\nrpat\n*\na 5\n*\nrpacor 10000\n*'
         pipe += '\n\n*\n'
