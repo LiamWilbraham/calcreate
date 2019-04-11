@@ -47,9 +47,11 @@ class Gaussian:
 
     def __init__(self,
                  name,
-                 smiles,
+                 smiles=None,
                  func='pbepbe',
                  basis='6-31G',
+                 solvent=None,
+                 solventmodel=None,
                  charge=0,
                  mult=1,
                  kwds=[],
@@ -62,6 +64,8 @@ class Gaussian:
         self.smiles = smiles
         self.func = func
         self.basis = basis
+        self.solvent = solvent
+        self.solventmodel = solventmodel
         self.charge = charge
         self.mult = mult
         self.kwds = kwds
@@ -77,7 +81,11 @@ class Gaussian:
 
         header = self._generate_header()
         kwds = self._generate_kwds()
-        xyz = generate_xyz(self.smiles, self.xtb)
+        if self.smiles != None:
+            xyz = generate_xyz(self.smiles, self.xtb)
+        else:
+            xyzfile = self.name+'.xyz'
+            xyz = write_xyz(xyzfile)
         self._write_input(header, kwds, xyz)
         self._remove_junk()
 
@@ -86,7 +94,7 @@ class Gaussian:
         return string.format(self.name, self.nprocs, self.mem)
 
     def _generate_kwds(self):
-        string = '{} '*len(self.kwds)+'\n'
+        string = '{} '*len(self.kwds)
         return string.format(*self.kwds)
 
     def _write_input(self, header, kwds, xyz):
@@ -94,7 +102,9 @@ class Gaussian:
             f.write(header)
             f.write('#P {}/{} '.format(self.func, self.basis))
             f.write(kwds)
-            f.write('\n{}\n\n'.format(self.name))
+            if self.solvent != None:
+                f.write(' SCRF=({}, solvent={})'.format(self.solventmodel, self.solvent))
+            f.write('\n\n{}\n\n'.format(self.name))
             f.write('{} {}\n'.format(self.charge, self.mult))
             for line in xyz:
                 f.write(line)
